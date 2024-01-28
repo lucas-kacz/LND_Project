@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 
 #LND GRPC Libraries
 import lightning_pb2 as ln
@@ -15,7 +16,13 @@ with open(os.path.expanduser('~/.lnd/data/chain/bitcoin/signet/admin.macaroon'),
 
 os.environ["GRPC_SSL_CIPHER_SUITES"] = 'HIGH+ECDSA'
 
+cert = open(os.path.expanduser('~/.lnd/tls.cert'), 'rb').read()
+creds = grpc.ssl_channel_credentials(cert)
+channel = grpc.secure_channel('localhost:10009', creds)
+stub = lnrpc.LightningStub(channel)
+
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/")
 def hello_world():
@@ -24,10 +31,11 @@ def hello_world():
 
 @app.route('/getWalletBalance')
 def getWalletBalance():
-    cert = open(os.path.expanduser('~/.lnd/tls.cert'), 'rb').read()
-    creds = grpc.ssl_channel_credentials(cert)
-    channel = grpc.secure_channel('localhost:10009', creds)
-    stub = lnrpc.LightningStub(channel)
-
     response = stub.WalletBalance(ln.WalletBalanceRequest(), metadata=[('macaroon', macaroon)])
     return [response.total_balance]
+
+
+@app.route('/connectNode')
+def connectNode():
+    response = stub.ConnectPeer(ln.ConnectPeerRequest(addr=ln.LightningAddress(pubkey="03ddab321b760433cbf561b615ef62ac7d318630c5f51d523aaf5395b90b751956")), metadata=[('macaroon', macaroon)])
+    return [response]
