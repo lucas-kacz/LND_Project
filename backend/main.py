@@ -1,11 +1,16 @@
-from flask import Flask
+from flask import Flask, jsonify, make_response
 from flask_cors import CORS
+
+import jsonpickle
+import json
 
 #LND GRPC Libraries
 import lightning_pb2 as ln
 import lightning_pb2_grpc as lnrpc
 import grpc
 import os
+
+from google.protobuf.json_format import MessageToJson
 
 import codecs
 
@@ -39,3 +44,13 @@ def getWalletBalance():
 def connectNode():
     response = stub.ConnectPeer(ln.ConnectPeerRequest(addr=ln.LightningAddress(pubkey="03ddab321b760433cbf561b615ef62ac7d318630c5f51d523aaf5395b90b751956")), metadata=[('macaroon', macaroon)])
     return [response]
+
+@app.route('/listPeers')
+def listPeers():
+    #response = stub.ListPeers(ln.ListPeersResponse(), metadata=[('macaroon', macaroon)])
+    request = ln.ListPeersRequest()
+    response = stub.ListPeers(request, metadata=[('macaroon', macaroon)])
+    response_json = MessageToJson(response)
+    print(response_json)
+    return make_response(response_json, 200)
+
