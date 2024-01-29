@@ -4,6 +4,8 @@ from flask_cors import CORS
 import jsonpickle
 import json
 
+import base64
+
 #LND GRPC Libraries
 import lightning_pb2 as ln
 import lightning_pb2_grpc as lnrpc
@@ -68,9 +70,15 @@ def listPeers():
     print(response_json)
     return make_response(response_json, 200)
 
-@app.route('/openChannel')
-def openChannel():
-    request = ln.OpenChannelRequest()
+@app.route('/openChannel/<node_pubkey>/<local_funding_amount>', methods = ['POST'])
+def openChannel(node_pubkey, local_funding_amount):
+    node_pubkey_bytes = node_pubkey.encode('utf-8')
+    local_funding_amount_int = int(local_funding_amount)
+    request = ln.OpenChannelRequest(node_pubkey_string=node_pubkey, local_funding_amount=local_funding_amount_int)
+    response = stub.OpenChannel(request, metadata=[('macaroon', macaroon)])
+    response_json = MessageToJson(response)
+    print(response_json)
+    return make_response(response_json, 200)
 
 
 @app.route('/createInvoice')
