@@ -1,0 +1,19 @@
+.tabs {
+    align-items: center;
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+    border-radius: 10px;
+}
+
+.tab-list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.tab-content {
+    padding: 1rem;
+    border: 1px solid #dee2e6;
+    border-top: none;
+}

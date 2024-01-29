@@ -1,10 +1,10 @@
 from flask import Flask, jsonify, make_response, request
 from flask_cors import CORS
 
-import jsonpickle
 import json
 
 import base64
+import binascii
 
 #LND GRPC Libraries
 import lightning_pb2 as ln
@@ -40,7 +40,8 @@ def hello_world():
 @app.route('/getWalletBalance')
 def getWalletBalance():
     response = stub.WalletBalance(ln.WalletBalanceRequest(), metadata=[('macaroon', macaroon)])
-    return [response.total_balance]
+    response_json = MessageToJson(response)
+    return make_response(response_json, 200)
 
 
 @app.route('/connectNode/<node_pubkey>/<host>', methods = ['POST'])
@@ -72,13 +73,14 @@ def listPeers():
 
 @app.route('/openChannel/<node_pubkey>/<local_funding_amount>', methods = ['POST'])
 def openChannel(node_pubkey, local_funding_amount):
-    node_pubkey_bytes = node_pubkey.encode('utf-8')
-    local_funding_amount_int = int(local_funding_amount)
-    request = ln.OpenChannelRequest(node_pubkey_string=node_pubkey, local_funding_amount=local_funding_amount_int)
-    response = stub.OpenChannel(request, metadata=[('macaroon', macaroon)])
-    response_json = MessageToJson(response)
-    print(response_json)
-    return make_response(response_json, 200)
+    local_funding_amount_int = max(int(local_funding_amount), 546)
+    node_pubkey_bytes = binascii.unhexlify(node_pubkey)
+    request = ln.OpenChannelRequest(node_pubkey=node_pubkey_bytes, local_funding_amount=local_funding_amount_int)
+    
+    # Handle the stream of responses
+    for response in stub.OpenChannel(request, metadata=[('macaroon', macaroon)]):
+        response_json = MessageToJson(response)
+        print(response_json)
 
 
 @app.route('/createInvoice')

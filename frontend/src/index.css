@@ -13,26 +13,21 @@ code {
 }
 */
 
-*{
+body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: sans-serif;
-}
-
-.App{
-  background-color: #5CCEFF ;
+  background-color: #5CCEFF;
 }
 
 .Card {
   background-color: white;
   border-radius: 10px;
-  padding: 3em;
-  text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 50%;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 3em auto;
+  height: fit-content;
 }
 
 .Card button {
@@ -46,4 +41,23 @@ code {
 
 .Card li {
   margin-bottom: 10px; /* Adjust the value as needed */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 0.5rem;
+  border: 1px solid #dee2e6;
+}
+
+th {
+  background-color: #f8f9fa;
+}
+
+.error-message, .loading-message {
+  font-style: italic;
+  color: red;
 }

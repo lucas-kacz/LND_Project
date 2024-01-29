@@ -1,0 +1,14 @@
+.tab-list-item {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.tab-list-item:hover {
+    background-color: #e9ecef;
+}
+
+.tab-list-active {
+    background-color: #8B80F9!important;
+    color: white;
+}

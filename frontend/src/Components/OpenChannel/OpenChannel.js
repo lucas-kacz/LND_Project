@@ -1,46 +1,72 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
+import './OpenChannel.css'
 
-const ListPeers = () => {
+const OpenChannel = () => {
 
     const backend_url = "http://localhost:5000"
 
     const [responseData, setResponseData] = useState(null)
+    const [error, setError] = useState(null)
+	const [loading, setLoading] = useState(false)
 
-    const listPeers = async () => {
-        try{
-          const response = await fetch(backend_url + "/listPeers", {
-            method: 'GET',
-          })
-    
-          if(!response.ok){
-            throw new Error('HTTP error ! Status : ${response.status}')
-          }
-    
-          const data = await response.json();
-          setResponseData(data)
+    const [nodePubKey, setNodePubKey] = useState("")
+    const [localFundingAmount, setlocalFundingAmount] = useState()
+
+    const handleNodePubKeyInputChange = (event) => {
+      	setNodePubKey(event.target.value)
+    }
+
+    const handleLocalFundingAmountInputChange = (event) => {
+      	setlocalFundingAmount(event.target.value)
+    }
+
+    const openChannel = async () => {
+		setLoading(true)
+      	try {
+			const response = await fetch(`${backend_url}/openChannel/${nodePubKey}/${localFundingAmount}`, {
+				method: 'POST',
+			})
+		
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`)
+			}
+			setLoading(false)
+			console.log(response)
+			setResponseData(response)
         } catch (error) {
-          console.error('Error fetching data', error);
+			setLoading(false)
+			console.error('Error connecting to the node', error)
+			setError(error.message)
         }
-      }
+    }
     
     return (
-        <div className="ListPeers">
-            <button onClick={listPeers}>List all Peers</button>
-            {responseData && responseData.peers.map((peer, index) => (
-                <div key={index}>
-                <p>Peer {index + 1}:</p>
-                <ul>
-                    <li><strong>pubKey:</strong> {peer.pubKey}</li>
-                    <li><strong>address:</strong> {peer.address}</li>
-                    <li><strong>bytesSent:</strong> {peer.bytesSent}</li>
-                    <li><strong>bytesRecv:</strong> {peer.bytesRecv}</li>
-                    <li><strong>pingTime:</strong> {peer.pingTime}</li>
-                    <li><strong>syncType:</strong> {peer.syncType}</li>
-                </ul>
-            </div>
-            ))}
-        </div>
-      )
+		<>
+			<div className="inputs-container">
+				<input
+					type="text"
+					value={nodePubKey}
+					onChange={handleNodePubKeyInputChange}
+					placeholder="Enter Node PubKey"
+					className="channel-input"
+				/>
+				<input
+					type="number"
+					value={localFundingAmount}
+					onChange={handleLocalFundingAmountInputChange}
+					placeholder="Enter Local Funding Amount"
+					className="channel-input"
+				/>
+			</div>
+			<div className="others-container">	
+				<button onClick={openChannel} className="open-button">OpenChannel</button>
+				
+				{loading && <p className="loading-message">Loading...</p>}
+				{error && <p className="error-message">Error: {error.message}</p>}
+				{responseData && <p>Response: {JSON.stringify(responseData)}</p>}
+			</div>
+		</>
+    )
 }
 
-export default ListPeers;
+export default OpenChannel;

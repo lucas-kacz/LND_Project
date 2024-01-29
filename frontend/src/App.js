@@ -1,51 +1,37 @@
-import { useState } from 'react';
-import Navbar from './Components/Navbar/Navbar';
-import ConnectNode from './Components/ConnectNode/ConnectNode';
-import ListPeers from './Components/ListPeers/ListPeers';
+import Navbar from './Components/Navbar/Navbar'
+import ConnectNode from './Components/ConnectNode/ConnectNode'
+import ListPeers from './Components/ListPeers/ListPeers'
+import OpenChannel from './Components/OpenChannel/OpenChannel'
+import Balance from './Components/Balance/Balance'
+import Tabs from './Components/Tabs/Tabs'
+import Tab from './Components/Tabs/Tab/Tab'
 
 function App() {
+	return (
+		<div>
+		<Navbar />
 
-  const backend_url = "http://localhost:5000"
+			<div className='Card'>
+				<Tabs>
+					<Tab label="Balance">
+						<Balance />
+					</Tab>
 
-  const [responseData, setResponseData] = useState(null)
+					<Tab label="Connect Node">
+						<ConnectNode />
+					</Tab>
 
-  const getBalance = async () => {
-    try{
-      const response = await fetch(backend_url + "/getWalletBalance", {
-        method: 'GET',
-      })
+					<Tab label="List Peers">
+						<ListPeers />
+					</Tab>
 
-      if(!response.ok){
-        throw new Error('HTTP error ! Status : ${response.status}')
-      }
-
-      const data = await response.json();
-      setResponseData(data)
-    } catch (error) {
-      console.error('Error fetching data', error);
-    }
-  }
-
-  return (
-    <div className="App">
-      <Navbar/>
-
-      <div className='Card'>
-        <button onClick={getBalance}>Get LND Wallet Balance</button>
-
-        {responseData && (
-          <div>
-            <h2>Data:</h2>
-            <pre>{JSON.stringify(responseData, null)}</pre>
-          </div>
-        )}
-
-        <ConnectNode/>
-
-        <ListPeers/>
-      </div>
-    </div>
-  );
+					<Tab label="Open Channel">
+						<OpenChannel />
+					</Tab>
+				</Tabs>
+			</div>
+		</div>
+	)
 }
 
 export default App;

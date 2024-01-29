@@ -1,4 +1,4 @@
-.connect-button {
+.open-button {
     padding: 0.5rem 1rem;
     margin: 1em auto;
     background-color: #8B80F9;
@@ -9,18 +9,18 @@
     transition: background-color 0.3s ease;
 }
 
-.connect-button:hover {
+.open-button:hover {
     background-color: #6C63D1;
 }
 
 .inputs-container {
     width: 80%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     margin: 1em auto;
 }
 
-.node-attribute-input {
+.channel-input {
     margin: 0 1em;
     box-sizing: border-box;
     padding: 0.5rem;
@@ -32,7 +32,7 @@
     transition: border-color 0.3s ease;
 }
 
-.node-attribute-input:focus {
+.channel-input:focus {
     border-color: #8B80F9;
 }
 
