@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Navbar from './Components/Navbar/Navbar';
+import ConnectNode from './Components/ConnectNode/ConnectNode';
 
 function App() {
 
@@ -35,6 +36,8 @@ function App() {
           <pre>{JSON.stringify(responseData, null)}</pre>
         </div>
       )}
+
+      <ConnectNode/>
     </div>
   );
 }
