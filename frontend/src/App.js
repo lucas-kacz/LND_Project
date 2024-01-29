@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Navbar from './Components/Navbar/Navbar';
 import ConnectNode from './Components/ConnectNode/ConnectNode';
+import ListPeers from './Components/ListPeers/ListPeers';
 
 function App() {
 
@@ -28,16 +29,21 @@ function App() {
   return (
     <div className="App">
       <Navbar/>
-      <button onClick={getBalance}>Get LND Wallet Balance</button>
 
-      {responseData && (
-        <div>
-          <h2>Data:</h2>
-          <pre>{JSON.stringify(responseData, null)}</pre>
-        </div>
-      )}
+      <div className='Card'>
+        <button onClick={getBalance}>Get LND Wallet Balance</button>
 
-      <ConnectNode/>
+        {responseData && (
+          <div>
+            <h2>Data:</h2>
+            <pre>{JSON.stringify(responseData, null)}</pre>
+          </div>
+        )}
+
+        <ConnectNode/>
+
+        <ListPeers/>
+      </div>
     </div>
   );
 }

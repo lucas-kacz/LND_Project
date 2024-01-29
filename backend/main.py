@@ -68,6 +68,11 @@ def listPeers():
     print(response_json)
     return make_response(response_json, 200)
 
+@app.route('/openChannel')
+def openChannel():
+    request = ln.OpenChannelRequest()
+
+
 @app.route('/createInvoice')
 def createInvoice():
     request = ln.Invoice()
