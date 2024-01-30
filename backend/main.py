@@ -61,12 +61,41 @@ def connectNode(node_pubkey, host):
             return f"An unexpected error occurred: {str(e)}"
     else:
         return "Method not allowed. Please use the POST method to connect to the node."
+    
+@app.route('/disconnectPeer/<node_pubkey>', methods = ['POST'])
+def disconnectPeer(node_pubkey):
+    if request.method == 'POST':
+        try:
+            response = stub.DisconnectPeer(ln.DisconnectPeerRequest(addr=ln.LightningAddress(pubkey=node_pubkey)), metadata=[('macaroon', macaroon)])
+            return [response]
+        except RpcError as e:
+            if "Failed to connect to all addresses" in str(e):
+                return "Failed to connect to the node. Check the node's address and try again."
+            elif "Permission denied" in str(e):
+                return "Permission denied. Make sure you have the required permissions to connect to the node."
+            else:
+                return f"An error occurred: {str(e)}"
+        except Exception as e:
+            return f"An unexpected error occurred: {str(e)}"
+    else:
+        return "Method not allowed. Please use the POST method to connect to the node."
 
+#List all peers
 @app.route('/listPeers')
 def listPeers():
     #response = stub.ListPeers(ln.ListPeersResponse(), metadata=[('macaroon', macaroon)])
     request = ln.ListPeersRequest()
     response = stub.ListPeers(request, metadata=[('macaroon', macaroon)])
+    response_json = MessageToJson(response)
+    print(response_json)
+    return make_response(response_json, 200)
+
+#List all opened channels
+@app.route('/listChannels')
+def listChannels():
+    #response = stub.ListPeers(ln.ListPeersResponse(), metadata=[('macaroon', macaroon)])
+    request = ln.ListChannelsRequest()
+    response = stub.ListChannels(request, metadata=[('macaroon', macaroon)])
     response_json = MessageToJson(response)
     print(response_json)
     return make_response(response_json, 200)
@@ -79,6 +108,16 @@ def openChannel(node_pubkey, local_funding_amount):
     
     # Handle the stream of responses
     for response in stub.OpenChannel(request, metadata=[('macaroon', macaroon)]):
+        response_json = MessageToJson(response)
+        print(response_json)
+
+@app.route('/closeChannel/<channel_point>', methods = ['POST'])
+def closeChannel(channel_point):
+    #channel_point_bytes = binascii.unhexlify(channel_point)
+    request = ln.CloseChannelRequest(channel_point=ln.ChannelPoint(funding_txid_str=channel_point))
+    
+    # Handle the stream of responses
+    for response in stub.CloseChannel(request, metadata=[('macaroon', macaroon)]):
         response_json = MessageToJson(response)
         print(response_json)
 

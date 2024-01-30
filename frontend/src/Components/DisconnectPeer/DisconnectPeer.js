@@ -1,7 +1,6 @@
 import React, { useState } from "react"
-import './OpenChannel.css'
 
-const OpenChannel = () => {
+const DisonnectPeer = () => {
 
     const backend_url = "http://localhost:5000"
 
@@ -10,20 +9,16 @@ const OpenChannel = () => {
 	const [loading, setLoading] = useState(false)
 
     const [nodePubKey, setNodePubKey] = useState("")
-    const [localFundingAmount, setlocalFundingAmount] = useState()
 
-    const handleNodePubKeyInputChange = (event) => {
+    const handleKeyInputChange = (event) => {
       	setNodePubKey(event.target.value)
     }
 
-    const handleLocalFundingAmountInputChange = (event) => {
-      	setlocalFundingAmount(event.target.value)
-    }
-
-    const openChannel = async () => {
+    const disconnectPeer = async () => {
 		setLoading(true)
-      	try {
-			const response = await fetch(`${backend_url}/openChannel/${nodePubKey}/${localFundingAmount}`, {
+		setNodePubKey(nodePubKey)
+        try {
+			const response = await fetch(`${backend_url}/disconnectPeer/${nodePubKey}`, {
 				method: 'POST',
 			})
 		
@@ -33,40 +28,33 @@ const OpenChannel = () => {
 			setLoading(false)
 			console.log(response)
 			setResponseData(response)
-        } catch (error) {
+		} catch (error) {
 			setLoading(false)
 			console.error('Error connecting to the node', error)
 			setError(error.message)
-        }
+		}
     }
     
     return (
-		<>
+        <>
 			<div className="inputs-container">
 				<input
 					type="text"
 					value={nodePubKey}
-					onChange={handleNodePubKeyInputChange}
+					onChange={handleKeyInputChange}
 					placeholder="Enter Node PubKey"
-					className="channel-input"
-				/>
-				<input
-					type="number"
-					value={localFundingAmount}
-					onChange={handleLocalFundingAmountInputChange}
-					placeholder="Enter Local Funding Amount"
-					className="channel-input"
+					className="node-attribute-input"
 				/>
 			</div>
-			<div className="others-container">	
-				<button onClick={openChannel} className="open-button">Open Channel</button>
-				
+			<div className="others-container">
+				<button onClick={disconnectPeer} className="connect-button">Disconnect From Peer</button>
+
 				{loading && <p className="loading-message">Loading...</p>}
 				{error && <p className="error-message">Error: {error.message}</p>}
 				{responseData && <p>Response: {JSON.stringify(responseData)}</p>}
 			</div>
-		</>
-    )
+        </>
+      )
 }
 
-export default OpenChannel;
+export default DisonnectPeer;

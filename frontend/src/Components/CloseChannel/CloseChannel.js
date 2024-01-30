@@ -1,7 +1,6 @@
 import React, { useState } from "react"
-import './OpenChannel.css'
 
-const OpenChannel = () => {
+const CloseChannel = () => {
 
     const backend_url = "http://localhost:5000"
 
@@ -9,21 +8,21 @@ const OpenChannel = () => {
     const [error, setError] = useState(null)
 	const [loading, setLoading] = useState(false)
 
-    const [nodePubKey, setNodePubKey] = useState("")
+    const [channel_point, setChannel_point] = useState("")
     const [localFundingAmount, setlocalFundingAmount] = useState()
 
-    const handleNodePubKeyInputChange = (event) => {
-      	setNodePubKey(event.target.value)
+    const handleChannelPointInputChange = (event) => {
+        setChannel_point(event.target.value)
     }
 
     const handleLocalFundingAmountInputChange = (event) => {
-      	setlocalFundingAmount(event.target.value)
+        setlocalFundingAmount(event.target.value)
     }
 
-    const openChannel = async () => {
+    const closeChannel = async () => {
 		setLoading(true)
       	try {
-			const response = await fetch(`${backend_url}/openChannel/${nodePubKey}/${localFundingAmount}`, {
+			const response = await fetch(`${backend_url}/closeChannel/${channel_point}/${localFundingAmount}`, {
 				method: 'POST',
 			})
 		
@@ -45,9 +44,9 @@ const OpenChannel = () => {
 			<div className="inputs-container">
 				<input
 					type="text"
-					value={nodePubKey}
-					onChange={handleNodePubKeyInputChange}
-					placeholder="Enter Node PubKey"
+					value={channel_point}
+					onChange={handleChannelPointInputChange}
+					placeholder="Enter Channel Point"
 					className="channel-input"
 				/>
 				<input
@@ -59,7 +58,7 @@ const OpenChannel = () => {
 				/>
 			</div>
 			<div className="others-container">	
-				<button onClick={openChannel} className="open-button">Open Channel</button>
+				<button onClick={closeChannel} className="open-button">Close Channel</button>
 				
 				{loading && <p className="loading-message">Loading...</p>}
 				{error && <p className="error-message">Error: {error.message}</p>}
@@ -69,4 +68,4 @@ const OpenChannel = () => {
     )
 }
 
-export default OpenChannel;
+export default CloseChannel;
