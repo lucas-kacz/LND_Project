@@ -86,10 +86,17 @@ In this part you can see how the project works with attached screenshots.
 
 In order to connect to a node you can go check this [website](https://mempool.space/fr/signet/lightning) and chose a node of your choice
 
+Get Wallet Balance
 ![Get Wallet Balance](./Screenshots/WalletBalance.png)
 
+Connecting to a Peer
 ![Connecting to a Peer](./Screenshots/ConnectToPeer.png)
 
+Listing current Peers
 ![Listing current Peers](./Screenshots/ListPeers.png)
 
+Open a Channel
 ![Open a Channel](./Screenshots/ChannelOpening.png)
+
+List Channels
+![List Channels](./Screenshots/ListChannels.png)
