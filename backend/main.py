@@ -49,7 +49,7 @@ def connectNode(node_pubkey, host):
     if request.method == 'POST':
         try:
             response = stub.ConnectPeer(ln.ConnectPeerRequest(addr=ln.LightningAddress(pubkey=node_pubkey, host=host), timeout=10), metadata=[('macaroon', macaroon)])
-            return [response]
+            return "Connected"
         except RpcError as e:
             if "Failed to connect to all addresses" in str(e):
                 return "Failed to connect to the node. Check the node's address and try again."

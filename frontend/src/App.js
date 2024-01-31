@@ -32,10 +32,6 @@ function App() {
 						<ListPeers />
 					</Tab>
 
-					<Tab label="List Channels">
-						<ListChannels />
-					</Tab>
-
 					<Tab label="Open Channel">
 						<OpenChannel />
 					</Tab>
@@ -43,6 +39,11 @@ function App() {
 					<Tab label="Close Channel">
 						<CloseChannel />
 					</Tab>
+
+					<Tab label="List Channels">
+						<ListChannels />
+					</Tab>
+
 				</Tabs>
 			</div>
 		</div>

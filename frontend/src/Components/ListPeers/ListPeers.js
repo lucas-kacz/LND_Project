@@ -37,7 +37,8 @@ const ListPeers = () => {
 
 			{error && <p className="error-message">Error: {error.message}</p>}
 
-			{responseData && responseData.peers.map((peer, index) => (
+			{responseData && responseData.peers && responseData.peers.length > 0 ? (
+                responseData.peers.map((peer, index) => (
 				<>
 					<h2>Peer {index +1}</h2>
 					<table>
@@ -67,7 +68,10 @@ const ListPeers = () => {
 						</tr>
 					</table>
 				</>
-			))}
+				))
+				) : (
+				<p></p>
+			)}
         </div>
     )
 }

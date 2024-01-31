@@ -11,7 +11,6 @@ const ConnectNode = () => {
 
     const [nodePubKey, setNodePubKey] = useState("")
 	const [nodeAddress, setNodeAddress] = useState("")
-    const [nodeHost, setNodeHost] = useState("")
 
     const handleKeyInputChange = (event) => {
       	setNodePubKey(event.target.value)
@@ -21,15 +20,12 @@ const ConnectNode = () => {
 		setNodeAddress(event.target.value)
   	}
 
-    const handleHostInputChange = (event) => {
-        setNodeHost(event.target.value)
-    }
 
     const connectNode = async () => {
 		setLoading(true)
-		setNodePubKey(nodePubKey + '@' + nodeAddress)
+		//setNodePubKey(nodePubKey + '@' + nodeAddress)
         try {
-			const response = await fetch(`${backend_url}/connectNode/${nodePubKey}/${nodeHost}`, {
+			const response = await fetch(`${backend_url}/connectNode/${nodePubKey}/${nodeAddress}`, {
 				method: 'POST',
 			})
 		
@@ -61,15 +57,7 @@ const ConnectNode = () => {
 					type="text"
 					value={nodeAddress}
 					onChange={handleAddressInputChange}
-					placeholder="Enter Node Address"
-					className="node-attribute-input"
-				/>
-				<p> : </p>
-				<input
-					type="text"
-					value={nodeHost}
-					onChange={handleHostInputChange}
-					placeholder="Enter Node Hostname"
+					placeholder="Enter Node Address (e.g. 69.69.69.69:1337)"
 					className="node-attribute-input"
 				/>
 			</div>

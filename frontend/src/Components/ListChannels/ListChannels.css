@@ -1,0 +1,14 @@
+.channels-button {
+    padding: 0.5rem 1rem;
+    margin-bottom: 1rem;
+    background-color: #8B80F9;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.channels-button:hover {
+    background-color: #6C63D1;
+}
